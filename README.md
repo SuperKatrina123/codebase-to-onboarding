@@ -1,8 +1,13 @@
 # Codebase to Onboarding
 
-A skill that turns any codebase into a practical onboarding page for new team members.
+A skill that turns any codebase into a practical onboarding page or starter team knowledge base for new team members.
 
-Instead of generating a general tutorial, this skill creates a single-page HTML onboarding guide focused on helping a newcomer become productive quickly:
+Instead of generating a general tutorial, this skill creates either:
+
+- a single-page HTML onboarding guide for fast orientation
+- or, when the user wants a team knowledge base, a landing page plus split Markdown docs
+
+The content is focused on helping a newcomer become productive quickly:
 
 - understand what the system does
 - run it locally
@@ -25,7 +30,9 @@ It is not trying to teach computer science from scratch. It is trying to provide
 
 ## Output
 
-The output should be a single self-contained HTML onboarding page with:
+### Mode A: Onboarding Page
+
+The default output is a single self-contained HTML onboarding page with:
 
 - a project snapshot
 - a getting-started checklist
@@ -34,6 +41,20 @@ The output should be a single self-contained HTML onboarding page with:
 - common-task entry points
 - a debugging playbook
 - a team-conventions section
+
+### Mode B: Team Knowledge Base
+
+When the user's end goal is a maintainable team knowledge base, the output should be a bundle with:
+
+- `index.html` as the landing page
+- `01-overview.md`
+- `02-core-flow.md`
+- `03-module-map.md`
+- `04-change-guide.md`
+- `05-debugging.md`
+- `06-sources-and-gaps.md`
+
+The landing page should optimize for quick orientation. The Markdown pages should optimize for long-term maintenance and linking.
 
 ## How to use
 
@@ -47,6 +68,7 @@ Typical usage patterns:
 
 - "Turn this codebase into an onboarding page"
 - "Create onboarding docs for this repo"
+- "Build a team knowledge base from this repo"
 - "Make a newcomer guide from this project"
 - "Explain this repo for a new teammate"
 - "Generate a team onboarding page from this codebase"
@@ -60,10 +82,12 @@ Short triggers:
 - "create newcomer docs"
 - "repo onboarding page"
 - "new engineer handoff"
+- "team knowledge base from this repo"
 
 More explicit triggers:
 
 - "Turn this codebase into a team onboarding page"
+- "Build a team knowledge base from this repository"
 - "Create an onboarding guide for a new engineer joining this project"
 - "Explain this repository like I just joined the team"
 - "Make a single-page onboarding doc from this repo"
@@ -91,6 +115,12 @@ For a GitHub repo:
 Create a newcomer onboarding page from https://github.com/example/repo and include a repo map, a core request flow, and likely debugging entry points.
 ```
 
+For a team knowledge base:
+
+```text
+Build a team knowledge base from ./services/bff. I want a landing page plus split Markdown docs the team can keep updating.
+```
+
 For a more product-oriented handoff:
 
 ```text
@@ -99,7 +129,9 @@ Explain this repository like I just joined the team. Show what the product does,
 
 ## Example output structure
 
-A strong onboarding page will usually look like this:
+### Landing page
+
+A strong onboarding landing page will usually look like this:
 
 ### 1. Project Snapshot
 
@@ -151,6 +183,17 @@ A strong onboarding page will usually look like this:
 - data flow conventions
 - error handling style
 
+### Split knowledge-base pages
+
+In knowledge-base mode, add split pages such as:
+
+- `01-overview.md`
+- `02-core-flow.md`
+- `03-module-map.md`
+- `04-change-guide.md`
+- `05-debugging.md`
+- `06-sources-and-gaps.md`
+
 ## What makes this skill useful
 
 The skill is opinionated in a practical way:
@@ -160,6 +203,7 @@ The skill is opinionated in a practical way:
 - it avoids inventing missing setup details
 - it explains where to make changes, not just what the architecture is
 - it tries to reduce newcomer overwhelm by separating "learn now" from "learn later"
+- it can bridge from a one-time onboarding page to maintainable team docs
 
 ## File structure
 
@@ -169,6 +213,7 @@ codebase-to-onboarding/
 ├── SKILL.md
 └── references/
     ├── design-guidelines.md
+    ├── knowledge-base-structure.md
     └── onboarding-elements.md
 ```
 
@@ -176,4 +221,5 @@ codebase-to-onboarding/
 
 - If setup or team conventions are not obvious from the repository, the skill should say so clearly rather than guessing.
 - The most valuable sections are usually `Getting Started Checklist`, `Repo Map`, `Core Flow Walkthrough`, and `Debugging Playbook`.
+- In knowledge-base mode, the most valuable extra page is usually `06-sources-and-gaps.md`.
 - You can refine the skill later after testing it on real repos from your team.

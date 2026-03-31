@@ -1,11 +1,17 @@
 ---
 name: codebase-to-onboarding
-description: "Turn any codebase into a practical onboarding page for new team members. Use this skill whenever someone wants to explain a repo to a new engineer, create a newcomer guide, generate an internal onboarding page, map the architecture for teammates, or help someone become productive quickly in an existing codebase. Also trigger when users mention 'make onboarding docs from this repo,' 'turn this codebase into a team onboarding page,' 'explain this project for a new teammate,' 'new engineer handoff,' or 'repo walkthrough for onboarding.' The output should be a polished single-page HTML onboarding guide with setup steps, repo map, key flows, debugging entry points, common tasks, and team conventions."
+description: "Turn any codebase into a practical onboarding page and starter knowledge base for new team members. Use this skill whenever someone wants to explain a repo to a new engineer, create a newcomer guide, generate an internal onboarding page, build a team knowledge base from a repository, map the architecture for teammates, or help someone become productive quickly in an existing codebase. Also trigger when users mention 'make onboarding docs from this repo,' 'turn this codebase into a team onboarding page,' 'build a team knowledge base from this repo,' 'explain this project for a new teammate,' 'new engineer handoff,' or 'repo walkthrough for onboarding.' The output should be either a polished single-page HTML onboarding guide or, when the user wants a team knowledge base, a bundle with a landing HTML page plus split Markdown knowledge-base pages."
 ---
 
 # Codebase-to-Onboarding
 
-Transform any codebase into a practical, beautiful onboarding page for new team members. The output should be a single self-contained HTML file that helps a newcomer understand what the system does, how to run it locally, where key logic lives, how one or two important workflows move through the code, where to make common changes, and how to debug the most likely problems.
+Transform any codebase into a practical, beautiful onboarding asset for new team members. The default output is a single self-contained HTML file that helps a newcomer understand what the system does, how to run it locally, where key logic lives, how one or two important workflows move through the code, where to make common changes, and how to debug the most likely problems.
+
+If the user's end goal is a **team knowledge base**, do not stop at the landing page. Produce a **knowledge-base bundle**:
+
+- a landing `index.html` for fast orientation
+- a split set of Markdown pages for maintainable team docs
+- a sources-and-gaps page that makes evidence and missing information explicit
 
 The goal is not to teach computer science. The goal is to help a new teammate become productive quickly and confidently.
 
@@ -13,14 +19,14 @@ The goal is not to teach computer science. The goal is to help a new teammate be
 
 When the skill is first triggered and the user has not specified a codebase yet, introduce yourself like this:
 
-> **I can turn a codebase into a practical onboarding page for new team members.**
+> **I can turn a codebase into a practical onboarding page or starter team knowledge base.**
 >
 > Point me at:
 > - **A local folder** — e.g. "turn ./my-project into an onboarding page"
 > - **A GitHub repo** — e.g. "make onboarding from https://github.com/org/repo"
 > - **The current project** — e.g. "turn this repo into onboarding docs"
 >
-> I will inspect the codebase, identify the setup flow, key directories, core system flows, common change points, and debugging entry points, then generate a single-page HTML onboarding guide your team can open in a browser.
+> I will inspect the codebase, identify the setup flow, key directories, core system flows, common change points, and debugging entry points, then generate either a single-page HTML onboarding guide or, if you want a team knowledge base, a landing page plus split Markdown docs your team can maintain.
 
 If the user provides a GitHub link, clone it first into a temporary directory before analysis. If they say "this codebase" or similar, use the current working directory.
 
@@ -47,7 +53,7 @@ The tone should feel like a senior teammate giving a high-quality handoff: warm,
 
 ## Core Outcome
 
-By the end of the onboarding page, a new teammate should be able to answer:
+By the end of the onboarding asset, a new teammate should be able to answer:
 
 - What does this system do?
 - How do I run it locally?
@@ -57,11 +63,50 @@ By the end of the onboarding page, a new teammate should be able to answer:
 - If something breaks, where should I look first?
 - What conventions or patterns does this codebase expect me to follow?
 
-If the page does not help the learner answer those questions, it is incomplete.
+If the landing page or knowledge-base bundle does not help the learner answer those questions, it is incomplete.
+
+## Output Modes
+
+Choose the smallest output that fits the user's real goal.
+
+### Mode A: Onboarding Page
+
+Use this when the user wants:
+
+- a newcomer guide
+- an onboarding page
+- a repo walkthrough
+- a quick internal handoff
+
+Deliverable:
+
+- one self-contained `index.html`
+
+### Mode B: Team Knowledge Base
+
+Use this when the user wants:
+
+- a team knowledge base
+- docs the team can keep maintaining
+- onboarding plus follow-on documentation
+- repo docs that should outlive one onboarding session
+
+Deliverables:
+
+- one landing `index.html`
+- split Markdown pages such as:
+  - `01-overview.md`
+  - `02-core-flow.md`
+  - `03-module-map.md`
+  - `04-change-guide.md`
+  - `05-debugging.md`
+  - `06-sources-and-gaps.md`
+
+The landing page should help someone orient quickly. The Markdown pages should help the team maintain and extend the documentation over time.
 
 ---
 
-## The Process (4 Phases)
+## The Process (5 Phases)
 
 ### Phase 1: Codebase Analysis
 
@@ -81,9 +126,9 @@ Extract:
 
 Do not dump the entire file tree. Curate. Show only the parts a newcomer actually needs in week one.
 
-### Phase 2: Onboarding Design
+### Phase 2: Information Architecture Design
 
-Turn the analysis into a focused onboarding journey. Organize the page into 6-8 modules. The arc should move from orientation to action:
+Turn the analysis into a focused onboarding journey. Organize the landing page into 6-8 modules. The arc should move from orientation to action:
 
 | Module Position | Purpose | Why it matters |
 |---|---|---|
@@ -106,12 +151,19 @@ Each module should contain:
 
 Optional quizzes are allowed, but they should test practical onboarding judgment, not trivia.
 
-### Phase 3: Build the Onboarding Page
+If the user wants a team knowledge base, also design the split Markdown pages now. Use:
+
+- a landing page for orientation
+- split pages for stable reference and future updates
+- one explicit sources-and-gaps page so the team can see what came from code and what still needs human input
+
+### Phase 3: Build the Landing Page
 
 Generate a single HTML file with embedded CSS and JavaScript. Read:
 
 - `references/design-guidelines.md`
 - `references/onboarding-elements.md`
+- `references/knowledge-base-structure.md` when producing team knowledge base output
 
 Build in this order:
 
@@ -121,14 +173,28 @@ Build in this order:
 4. Conventions module: code style clues, testing, contribution path
 5. Final polish: mobile readability, visual consistency, accessibility, smooth interaction
 
-### Phase 4: Review and Hand Off
+### Phase 4: Split Into Maintainable Docs
 
-After generating the HTML, open it for review. Summarize:
+If the output mode is **Team Knowledge Base**, split the content into Markdown pages. Prefer pages that map to how teammates actually work:
+
+- overview and runtime model
+- repo map and architectural zones
+- one or two core flows
+- common change recipes
+- debugging playbook
+- sources and documentation gaps
+
+These pages should not repeat the landing page word-for-word. They should be easier to maintain, update, and link from a wiki.
+
+### Phase 5: Review and Hand Off
+
+After generating the output, review it. Summarize:
 
 - What the product is
 - What the most important newcomer knowledge is
 - Which modules are most useful for day one versus week one
 - Any gaps caused by missing docs or ambiguous code
+- Which parts are evidence-backed from the repo versus which parts need team follow-up
 
 If the repo lacks enough setup or convention information, say so clearly in the output rather than guessing.
 
@@ -136,7 +202,7 @@ If the repo lacks enough setup or convention information, say so clearly in the 
 
 ## Recommended Module Types
 
-These are the default building blocks for a strong onboarding page:
+These are the default building blocks for a strong onboarding landing page:
 
 ### 1. Project Snapshot
 
@@ -223,6 +289,17 @@ Infer visible conventions from the codebase and present them explicitly:
 
 Do not invent conventions that are not visible in the repo.
 
+### 8. Sources And Gaps
+
+For knowledge-base mode, add a page that explicitly records:
+
+- which conclusions came directly from code
+- which files were used as evidence
+- which operational details are still missing from the repo
+- what the team should add next
+
+This page prevents the generated docs from sounding more certain than the repository actually allows.
+
 ---
 
 ## Content Principles
@@ -259,6 +336,16 @@ If there are likely gotchas, call them out:
 - Fragile mocks or fixtures
 - Parallel backend/frontend setup
 
+## Knowledge Base Mode Principles
+
+When the user wants a team knowledge base, optimize for maintainability, not just first-read experience.
+
+- The HTML landing page is the front door, not the whole house.
+- Split pages by real maintenance domains, not by arbitrary prose sections.
+- Keep evidence and uncertainty visible.
+- Prefer file paths and change entry points over broad architectural essays.
+- If the repo lacks team process details, add placeholders or gap notes instead of pretending the code proves them.
+
 ### Explain the why behind repo structure
 
 Do not just say what a folder contains. Explain why the team likely separated concerns that way.
@@ -267,7 +354,7 @@ Do not just say what a folder contains. Explain why the team likely separated co
 
 ## Required Elements
 
-Every onboarding page must include all of the following:
+Every landing page must include all of the following:
 
 - **Project Snapshot**
 - **Getting Started Checklist**
@@ -279,6 +366,11 @@ Every onboarding page must include all of the following:
 - **Team Conventions section**
 
 These are the backbone of the onboarding experience.
+
+In **Team Knowledge Base** mode, also include:
+
+- split Markdown pages for overview, core flow, module map, change guide, debugging, and sources/gaps
+- explicit separation between evidence-backed code facts and missing team-process knowledge
 
 Optional elements:
 
@@ -292,7 +384,8 @@ Optional elements:
 
 ## Implementation Rules
 
-- Output must be a single self-contained HTML file
+- In onboarding mode, output may be a single self-contained HTML file
+- In team knowledge base mode, output must include a landing HTML file plus split Markdown pages
 - Use `scroll-snap-type: y proximity`, not `mandatory`
 - Use responsive layouts that stack cleanly on mobile
 - Keep text blocks short and scannable
@@ -343,6 +436,7 @@ A good onboarding page tells the newcomer what matters immediately versus what c
 The `references/` directory contains supporting guidance:
 
 - `references/design-guidelines.md` — layout, typography, hierarchy, and visual tone for onboarding pages
+- `references/knowledge-base-structure.md` — default split-page structure and maintenance rules for team knowledge base output
 - `references/onboarding-elements.md` — implementation patterns for checklists, repo maps, flow walkthroughs, debug playbooks, common-task cards, and code translation blocks
 
 Use these references during build so the final page feels like a polished internal product, not a generic wall of text.
